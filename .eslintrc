@@ -1,0 +1,33 @@
+{
+  "extends": [
+    "wesbos"
+  ],
+  "linebreak-style": ["error", "windows"],
+  "globals": {
+    "_": "readonly",
+    "messages": "readonly",
+    "log": "readonly",
+    "emitter": "readonly",
+    "positions": "readonly"
+  },
+  "rules": {
+    "no-console": 2,
+    "max-lines": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 400,
+        "trailingComma": "es5",
+        "singleQuote": true,
+        "tabWidth": 4
+      }
+    ],
+    "prefer-destructuring": [
+      "error",
+      {
+        "object": true,
+        "array": false
+      }
+    ]
+  }
+}

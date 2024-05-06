@@ -1,0 +1,11 @@
+version: 0.0
+os: linux
+files:
+- source: /
+  destination: /home/ubuntu/Ludo-Naresh-Game-Backend
+file_exists_behavior: OVERWRITE
+hooks:
+  AfterInstall:
+    - location: scripts/build.sh
+      timeout: 600
+      runas: ubuntu

@@ -1,0 +1,45 @@
+{
+  "name": "crazy-ludo-game",
+  "version": "1.0.0",
+  "description": "Crazy Ludo game backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.14.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-config-wesbos": "^1.0.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.2.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.540.0",
+    "@socket.io/redis-adapter": "^8.2.1",
+    "aws-sdk": "^2.1589.0",
+    "axios": "^0.20.0",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.0.3",
+    "eslint-config-prettier": "^8.5.0",
+    "express": "^4.17.1",
+    "helmet": "^4.1.0",
+    "ioredis": "^5.3.2",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^7.6.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "multer-s3": "^3.0.1",
+    "redis": "^4.6.10",
+    "redlock": "^5.0.0-beta.2",
+    "socket.io": "^4.7.2",
+    "socket.io-redis": "^5.4.0"
+  }
+}
