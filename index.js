@@ -1,5 +1,5 @@
-// require('dotenv').config();
-require('dotenv').config({ path: './dev.env' });
+require('dotenv').config();
+// require('dotenv').config({ path: './dev.env' });
 require('./globals');
 
 const { mongodb, redis, getIp, queue } = require('./app/utils');
