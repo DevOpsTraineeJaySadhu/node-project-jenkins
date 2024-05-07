@@ -107,7 +107,7 @@ controllers.generatePreSignUrl = async (req, res) => {
   try {
     const { key, sMedia } = req.query;
 
-    const url = await multer.signedUrlForImage(key, 'classic');
+    const url = await multer.signedUrlForImage(key, 'classic-multiplayer');
     if (!url) return res.reply(messages.not_generate('url'));
     if (url === 'type Not Match') return res.reply(messages.custom.type_not_match);
     if (sMedia === 'image' && key.split('.')[1] !== 'png') return res.reply(messages.custom.image_allowed); //
