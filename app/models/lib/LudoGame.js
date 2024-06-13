@@ -53,7 +53,7 @@ const LudoGame = new mongoose.Schema(
     nBoardFee: { type: Number, default: 0 },
     eGameType: {
       type: String,
-      enum: ['classic', 'twoToken', 'threeToken', 'popular', 'quick'],
+      enum: ['classic', 'twoToken', 'threeToken', 'popular', 'quick', 'multiPlayer'],
       default: 'classic',
     },
     iRoomId: {

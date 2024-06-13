@@ -25,6 +25,7 @@ controllers.joinTableMM = async (req, res) => {
     for (const element of req.oProtoData.aPlayer) {
       element.sUserToken = _.encodeToken({ iUserId: element.user_id, iBoardId: req.oProtoData.iGameId });
       element.sToken = _.salt(4, Number);
+      element.sImage = element.image;
     }
 
     req.board = await boardManager.createBoardMM(req.oProtoData);

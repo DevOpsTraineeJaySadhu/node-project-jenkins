@@ -148,15 +148,15 @@ class BoardManager {
   }
 
   generateClass(oBoardData) {
-    let boardClass;
-    switch (oBoardData.eGameType) {
-      case 'classic':
-        boardClass = new ClassicBoard(oBoardData);
-        break;
-      default:
-        log.red('Invalid boardType while generating class');
-        break;
-    }
+    // let boardClass;
+    // switch (oBoardData.eGameType) {
+    // case 'classic':
+    let boardClass = new ClassicBoard(oBoardData);
+    // break;
+    // default:
+    // log.red('Invalid boardType while generating class');
+    // break;
+    // }
     return boardClass;
   }
 

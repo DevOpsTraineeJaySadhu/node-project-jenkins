@@ -14,12 +14,16 @@ PlayerListener.prototype.logError = function (error, callback) {
   return callback(error);
 };
 
-PlayerListener.prototype.onEvent = async function ({ sEventName, oData }, callback = () => {}) {
+PlayerListener.prototype.onEvent = async function (sData, callback = () => {}) {
+  // const { sEventName, oData } = JSON.parse(await _.decryptDataGhetiya(Data));
+  const { sEventName, oData } = JSON.parse(await _.decryptDataGhetiya(sData));
   log.cyan('## sEventName in onEvent :: ', sEventName);
+  // console.log('Very Bad 🚀 ~ file: player.js:22 ~ eventData:', eventData);
+
   switch (sEventName) {
     case 'reqMovePawn':
-      const eventData = JSON.parse(await _.decryptDataGhetiya(oData));
-      this.movePawn(eventData, callback);
+      // const eventData = JSON.parse(await _.decryptDataGhetiya(oData));
+      this.movePawn(oData, callback);
       break;
     case 'reqRollDice':
       this.rollDice(oData, callback);
@@ -167,7 +171,7 @@ Player.prototype.setEventListeners = function () {
   this.socket.on('ping', this.ping.bind(this));
   this.socket.on('disconnect', this.disconnect.bind(this));
   this.socket.on('reqJoinBoard', this.joinBoard.bind(this));
-  this.socket.on('error', error => log.red('socket error', error));
+  this.socket.on('error', (error, msg) => log.red('socket error', error, msg));
 };
 
 Player.prototype.ping = function (body, callback) {
@@ -224,6 +228,7 @@ Player.prototype.joinBoard = async function ({ iBoardId, isReconnect }, callback
   if (!this.socket.eventNames().includes(iBoardId)) {
     const playerListener = new PlayerListener(iBoardId, participant.iUserId);
     this.socket.on(iBoardId, playerListener.onEvent.bind(playerListener));
+    console.log('Very Bad 🚀 ~ file: player.js:227 ~ playerListener:', playerListener);
   }
 
   if (!board.oSocketId) board.oSocketId = {};

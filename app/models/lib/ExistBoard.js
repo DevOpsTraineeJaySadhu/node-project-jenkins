@@ -7,7 +7,7 @@ const ExistBoard = mongoose.Schema(
     sCurrentBoardState: { type: String },
     eGameType: {
       type: String,
-      enum: ['classic', 'twoToken', 'threeToken', 'popular', 'quick'],
+      enum: ['classic', 'twoToken', 'threeToken', 'popular', 'quick', 'multiPlayer'],
       default: 'classic',
     },
   },

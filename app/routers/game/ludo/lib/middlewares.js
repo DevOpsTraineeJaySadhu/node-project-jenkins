@@ -87,7 +87,6 @@ middleware.createPrototype = async (req, res, next) => {
       nRealPlayerCount: oProtoBody.participation_count ? oProtoBody.participation_count : 1, //player
       nMaxRefundTime: oProtoBody.waiting_timer, // Refund time
       aPlayer: oProtoBody.aPlayer,
-      isEnvironment: 'DEV', //oProtoBody.environment // change 2-3
       // isEnvironment: 'DEV', //oProtoBody.environment
       isEnvironment: oProtoBody.environment, //oProtoBody.environment
       iRoomId: _.randomizeNumber(),

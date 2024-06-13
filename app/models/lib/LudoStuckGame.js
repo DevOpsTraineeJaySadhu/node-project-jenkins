@@ -54,7 +54,7 @@ const LudoGame = new mongoose.Schema(
 
     eGameType: {
       type: String,
-      enum: ['classic', 'twoToken', 'threeToken', 'popular', 'quick'],
+      enum: ['classic', 'twoToken', 'threeToken', 'popular', 'quick', 'multiPlayer'],
       default: 'classic',
     },
 

@@ -149,6 +149,7 @@ class Service {
         iUserId: oUserData.oUserData._id,
         nSeat: this.getEmptySeat(),
         nChips: _.salt(4, Number),
+        sImage: oUserData.oUserData.image,
       };
       const oParticipant = new Participant(_userData, this);
       const { nMaxWaitingTime } = this.oSetting;
