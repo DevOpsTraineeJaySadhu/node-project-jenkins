@@ -71,7 +71,7 @@ middleware.createPrototype = async (req, res, next) => {
       'user_info',
       'aPlayer',
     ]);
-    // log.green('oProtoBody :: ', oProtoBody.game_id);
+    log.green('oProtoBody :: ', oProtoBody.game_id);
     const oProtoData = {
       _id: `PROTO-${oProtoBody.game_id}`,
       iGameId: oProtoBody.game_id, // game id
@@ -94,7 +94,7 @@ middleware.createPrototype = async (req, res, next) => {
     };
 
     req.oProtoData = oProtoData;
-    // log.green('step 1 completed..........', oProtoData);
+    log.green('step 1 completed..........', oProtoData);
     next();
   } catch (error) {
     log.red('error in createPrototype!');
