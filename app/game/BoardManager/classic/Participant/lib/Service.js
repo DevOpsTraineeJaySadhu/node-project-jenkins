@@ -257,6 +257,7 @@ class Service {
               winner: '',
               score: [0, 0],
               isValidLeave: bValidLeave,
+              game_mode: this.eGameType,
             },
           };
         } else {
@@ -271,6 +272,7 @@ class Service {
               score: [0, 0],
               // isValidLeave: this.oBoard.isValidLeave,
               isValidLeave: bValidLeave,
+              game_mode: this.eGameType,
             },
           };
         }

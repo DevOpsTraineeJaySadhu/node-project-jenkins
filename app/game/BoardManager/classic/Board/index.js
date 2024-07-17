@@ -107,6 +107,7 @@ class Board extends Service {
         // this.aParticipant[i].aScore.nKills = _user.nKills;
         // this.aParticipant[i].aScore.nDeath = _user.nDeath;
         this.aParticipant[i].aScore.nRank = _user.nRank;
+        this.aParticipant[i].aScore.eState = _user.eState;
         aPayload.push(data.score.rank);
       }
 
@@ -140,6 +141,7 @@ class Board extends Service {
             score: aPayload,
             isValidLeave: bValidLeave,
             sWinningImage: `${this._id}.png`,
+            game_mode: this.eGameType,
           },
         };
       } else {
@@ -155,6 +157,7 @@ class Board extends Service {
             score: aPayload,
             isValidLeave: bValidLeave,
             sWinningImage: `${this._id}.png`,
+            game_mode: this.eGameType,
           },
         };
       }
