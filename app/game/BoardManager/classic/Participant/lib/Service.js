@@ -232,10 +232,6 @@ class Service {
         // await this.oBoard.update({ nAmountIn: this.oBoard.nAmountIn });
         await this.oBoard.deleteParticipant(this.iUserId);
 
-        if (this.oBoard.aParticipant.length === 1) {
-          this.oBoard.emit('resPlayerLeft', { iUserId: this.iUserId, sReason });
-          emitter.emit('flushBoard', { iBoardId: this.oBoard._id, iProtoId: this.oBoard.sPrivateCode || this.oBoard.iProtoId });
-        }
         let isExit = [];
         for (const p of this.oBoard.aParticipant) {
           isExit.push(p.aMovedPawn);
@@ -243,8 +239,6 @@ class Service {
         // const bValidLeave = isExit.length ? false : true;
         const bValidLeave = isExit.flat().length ? false : true;
         // let optionsEndGame;
-
-        log.green('axiosOptions::', axiosOptions);
 
         if (this.oBoard.isEnvironment === 'STAGING') {
           axiosOptions = {
@@ -276,18 +270,24 @@ class Service {
             },
           };
         }
-        if (this.oBoard.isEnvironment !== 'DEV') {
-          const endGame = await _.retryAxiosCall(axiosOptions);
-          if (endGame) {
-            apiResponse.nTimeApiCalled = nTimeApiCalled += 1;
-            apiResponse.sEndGameResponse = `API response send Successfully in ${nTimeApiCalled} try and: ${endGame}`;
-            aAPIResponse.push(apiResponse);
-            apiResponse = {};
-          }
-        }
+        log.green('axiosOptions::', axiosOptions);
 
+        if (this.oBoard.aParticipant.length === 1) {
+          this.oBoard.emit('resPlayerLeft', { iUserId: this.iUserId, sReason });
+
+          if (this.oBoard.isEnvironment !== 'DEV') {
+            const endGame = await _.retryAxiosCall(axiosOptions);
+            if (endGame) {
+              apiResponse.nTimeApiCalled = nTimeApiCalled += 1;
+              apiResponse.sEndGameResponse = `API response send Successfully in ${nTimeApiCalled} try and: ${endGame}`;
+              aAPIResponse.push(apiResponse);
+              apiResponse = {};
+            }
+          }
+          // emitter.emit('flushBoard', { iBoardId: this.oBoard._id, iProtoId: this.oBoard.sPrivateCode || this.oBoard.iProtoId });
+          return emitter.emit('saveBoardHistory', { iBoardId: this._id, aAPIResponse });
+        }
         this.oBoard.emit('resPlayerLeft', { iUserId: this.iUserId, sReason });
-        emitter.emit('saveBoardHistory', { iBoardId: this._id, aAPIResponse });
       };
 
       if (this.oBoard.eState === 'waiting') {

@@ -10,10 +10,91 @@ class Board extends Service {
 
   async refundOnLongWait() {
     try {
-      this.emit('resKickOut', { message: messages.custom.no_player_found });
-      emitter.emit('saveWaitingGame', { iBoardId: this._id });
+      if (this.eState === 'waiting') {
+        this.emit('resKickOut', { message: messages.custom.no_player_found });
+        // emitter.emit('flushBoard', { sTaskName: 'flushBoard', iBoardId: this._id, iUserId: this.iUserId ?? '' });
+        // await redis.client.unlink(_.getProtoKey(this.iProtoId));
+        // await redis.client.unlink(_.getBoardKey(this._id));
+        // return true;
+        let axiosOptions;
+        let aAPIResponse = [];
+        let apiResponse = {};
+        let nTimeApiCalled = 0;
+        let sEndGameResponse = '';
+        const retryAxiosCall = async (optionsEndGame, maxRetries = 3, delayMs = 15000) => {
+          try {
+            const response = await axios(optionsEndGame);
+            return response.data;
+          } catch (error) {
+            apiResponse.nTimeApiCalled = nTimeApiCalled += 1;
+            apiResponse.sEndGameResponse = `API response ${error.message}`;
+            aAPIResponse.push(apiResponse);
+            apiResponse = {};
+
+            if (maxRetries <= 0) {
+              // emitter.emit('saveBoardHistory', { iBoardId: this._id, aAPIResponse }); // TODO: flushBoard
+              emitter.emit('flushBoard', { sTaskName: 'flushBoard', iBoardId: this._id, aAPIResponse });
+              nTimeApiCalled = 0;
+              sEndGameResponse = '';
+              aAPIResponse = [];
+              apiResponse = {};
+              throw error; // No more retries, propagate the error
+            }
+            console.error(`API request failed. Retrying in ${delayMs / 1000} seconds...`);
+            // Use setTimeout to introduce a delay before retrying the request
+            await new Promise(resolve => setTimeout(resolve, delayMs));
+
+            return retryAxiosCall(optionsEndGame, maxRetries - 1, delayMs);
+          }
+        };
+        if (this.isEnvironment === 'STAGING') {
+          axiosOptions = {
+            method: 'post',
+            url: `${process.env.CLIENT_SERVER_STAG}/game-end`,
+            headers: { 'Content-Type': 'application/json', 'api-key': process.env.AUTH_STAG },
+            data: {
+              game_id: this._id,
+              status: 'canceled',
+              winner: '',
+              score: [0, 0],
+              isValidLeave: this.isValidLeave,
+              game_mode: this.eGameType,
+            },
+          };
+        } else {
+          axiosOptions = {
+            method: 'post',
+            url: `${process.env.CLIENT_SERVER_PROD}/game-end`,
+            headers: { 'Content-Type': 'application/json', 'api-key': process.env.AUTH_PROD },
+            data: {
+              game_id: this._id,
+              status: 'canceled',
+              winner: '',
+              score: [0, 0],
+              // isValidLeave: this.oBoard.isValidLeave,
+              isValidLeave: this.isValidLeave,
+              game_mode: this.eGameType,
+            },
+          };
+        }
+
+        if (this.isEnvironment !== 'DEV') {
+          const endGame = await retryAxiosCall(axiosOptions);
+          if (endGame) {
+            apiResponse.nTimeApiCalled = nTimeApiCalled += 1;
+            apiResponse.sEndGameResponse = `API response send Successfully in ${nTimeApiCalled} try and: ${endGame}`;
+            aAPIResponse.push(apiResponse);
+            apiResponse = {};
+          }
+        }
+        // emitter.emit('save', { sTaskName: 'flushBoard', iBoardId: this._id, aAPIResponse });
+        return emitter.emit('saveBoardHistory', { iBoardId: this._id, aAPIResponse });
+      }
+      return false;
     } catch (error) {
-      log.red(`save history :: ${error}`);
+      console.log(error);
+      log.red(`Error in refundOnLongWait ${error.message} `);
+      return false;
     }
   }
 

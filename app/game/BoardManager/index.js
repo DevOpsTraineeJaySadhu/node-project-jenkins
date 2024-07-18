@@ -22,7 +22,6 @@ class BoardManager {
     emitter.on('refundOnLongWait', this.schedular.bind(this, 'refundOnLongWait'));
     emitter.on('initializeGame', this.schedular.bind(this, 'initializeGame'));
     emitter.on('assignTurnTimeout', this.schedular.bind(this, 'assignTurnTimeout'));
-    emitter.on('refundOnLongWait', this.schedular.bind(this, 'refundOnLongWait'));
     emitter.on('declareResult', this.schedular.bind(this, 'declareResult'));
     emitter.on('finishGame', this.schedular.bind(this, 'finishGame'));
     emitter.on('finishGameTimer', this.schedular.bind(this, 'finishGameTimer'));
@@ -166,6 +165,8 @@ class BoardManager {
       const board = await this.getBoard(iBoardId);
       if (!board) return false;
       const oBoardJSON = board.toJSON();
+      // const keys = await redis.client.keys(`${iBoardId}:*`);
+      // await redis.client.unlink(keys);
       await LudoGame.create({ ...oBoardJSON, aAPIResponse: aAPIResponse, iGameId: oBoardJSON._id });
       log.green('game data save Successfully!!!!');
       const keys = await redis.client.keys(`${iBoardId}:*`);
@@ -202,10 +203,10 @@ class BoardManager {
       const board = await this.getBoard(iBoardId);
       if (!board) return false;
       const oBoardJSON = board.toJSON();
-      await LudoWaitingGame.create({ ...oBoardJSON, iGameId: oBoardJSON._id });
-      log.green('save Waiting Game  Successfully!!!!');
       const keys = await redis.client.keys(`${iBoardId}:*`);
       await redis.client.unlink(keys);
+      await LudoWaitingGame.create({ ...oBoardJSON, iGameId: oBoardJSON._id });
+      log.green('save Waiting Game  Successfully!!!!');
     } catch (error) {
       log.red(`save history :: ${error}`);
     }
@@ -214,6 +215,7 @@ class BoardManager {
   async flushBoard({ iBoardId, iProtoId }) {
     const keys = await redis.client.keys(`${iBoardId}:*`);
     if (keys.length) await redis.client.unlink(keys);
+    console.log('Very Bad 🚀 ~ file: index.js:217 ~ flushBoard ~ keys:', keys);
     await redis.client.unlink(_.getProtoKey(iProtoId));
   }
 

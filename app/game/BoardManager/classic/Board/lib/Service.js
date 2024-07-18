@@ -159,7 +159,7 @@ class Service {
       // oParticipant.updateUser({ $inc: { nChips: -this.nBoardFee } });
       // this.nAmountIn += this.nBoardFee;
 
-      // if (this.aParticipant.length === 1) this.setSchedular('refundOnLongWait', null, 60000);
+      if (this.aParticipant.length === 1) this.setSchedular('refundOnLongWait', null, 60000);
       // this.setSchedular('initializeGame', null, this.oSetting.nInitializeTimer);//TODO : 3 kalak * 3 * 1000
       // log.red('this.nMaxPlayer :: ', this.nMaxPlayer);
       // log.red('nTotalParticipant :: ', this.aParticipant.length);
