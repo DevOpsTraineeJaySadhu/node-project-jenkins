@@ -234,8 +234,6 @@ class Service {
 
     if (currentDice === 6 && this.isSix === 0) {
       this.isSix += 1;
-      this.isExit = false;
-      await this.update({ isExit: this.isExit });
     }
     const participant = this.getParticipant(this.iUserTurn);
 

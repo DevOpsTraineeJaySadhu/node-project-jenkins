@@ -263,7 +263,7 @@ class BoardManager {
         nAmountIn: 0,
         nAmountOut: 0,
         oSocketId: {},
-        isExit: true, // change p
+        isExit: false, // change p
         isValidLeave: true, // change p
         oSetting: { ...tableSettings },
         aPlayer: oProtoData.aPlayer ?? [],

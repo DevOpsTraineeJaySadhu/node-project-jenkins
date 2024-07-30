@@ -191,25 +191,12 @@ class Board extends Service {
         this.aParticipant[i].aScore.eState = _user.eState;
         aPayload.push(data.score.rank);
       }
-
-      // //TODO ADD if any value is present null in endGAme API
-      // for (let i = 0; i < aPayload.length - 1; i++) {
-      //   if (aPayload[i] === 1 && aPayload[i + 1] === null) {
-      //     aPayload[i + 1] = 2;
-      //   } else if (aPayload[i] === null && aPayload[i + 1] === 2) {
-      //     aPayload[i] = 1;
-      //   }
-      // }
-
       let isExit = [];
       for (const p of this.aParticipant) {
         // log.green('Participant aMovedPawn :: ', p.aMovedPawn);
         isExit.push(p.aMovedPawn);
       }
-      // console.log('🚀 ~ file: index.js:106 ~ Board ~ finishGame ~ isExit:', isExit);
-      // let optionsEndGame;
       const bValidLeave = isExit.flat().length ? false : true;
-      // console.log('🚀 ~ file: index.js:112 ~ Board ~ finishGame ~ bValidLeave:', bValidLeave);
       if (this.isEnvironment === 'STAGING') {
         axiosOptions = {
           method: 'post',

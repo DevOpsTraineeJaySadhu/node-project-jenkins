@@ -38,7 +38,7 @@ class Participant extends Service {
       nMove = 1;
       this.aAutoMovePawn.push(nIndex);
       if (!this.aMovedPawn.includes(nIndex)) this.aMovedPawn.push(nIndex);
-      this.oBoard.isExit = false;
+      // this.oBoard.isExit = false;
       this.oBoard.isValidLeave = false;
     } else {
       this.oBoard.nDice = this.oBoard.nDice >= 6 ? 6 : this.oBoard.nDice;
@@ -66,7 +66,7 @@ class Participant extends Service {
     for (const p of this.oBoard.aParticipant) {
       isExit.push(p.aMovedPawn);
     }
-    if (isExit.flat().length === 8) {
+    if (isExit.flat().length === this.oBoard.aParticipant.length * 4) {
       await this.oBoard.update({ isExit: true });
     }
     log.yellow('resMovePawn emit will be sent to user :: ', this.oBoard.nDice, nMove);
