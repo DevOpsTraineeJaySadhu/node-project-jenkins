@@ -208,7 +208,8 @@ class Board extends Service {
             winner: this.iWinnerId ? this.iWinnerId : this.aParticipant.filter(e => e.nRank === 1)[0].iUserId,
             score: aPayload,
             isValidLeave: bValidLeave,
-            sWinningImage: `${this._id}.png`,
+            // sWinningImage: `${this._id}.png`,
+            sWinningImage: `${process.env.BUCKET_URL}${process.env.BUCKET_FOLDER_NAME}/${this._id}.png`,
             game_mode: this.eGameType,
           },
         };
@@ -224,7 +225,8 @@ class Board extends Service {
             winner: this.iWinnerId ? this.iWinnerId : this.aParticipant.filter(e => e.nRank === 1)[0].iUserId,
             score: aPayload,
             isValidLeave: bValidLeave,
-            sWinningImage: `${this._id}.png`,
+            // sWinningImage: `${this._id}.png`,
+            sWinningImage: `${process.env.BUCKET_URL}${process.env.BUCKET_FOLDER_NAME}/${this._id}.png`,
             game_mode: this.eGameType,
           },
         };
@@ -235,8 +237,6 @@ class Board extends Service {
           aParticipant: this.aParticipant.sort((a, b) => a.nRank - b.nRank),
           isValidLeave: this.isValidLeave,
           aPlayer: this.aPlayer,
-          'access key id': process.env.AWS_ACCESS_ID,
-          'secret access key': process.env.AWS_SECRET_KEY,
         });
 
       log.green('optionsEndGame :: ', axiosOptions);
