@@ -36,6 +36,7 @@ const LudoGame = new mongoose.Schema(
         nScore: Number,
         bSound: Boolean,
         sReason: String,
+        nScore: Number,
       },
     ],
     aPlayer: [

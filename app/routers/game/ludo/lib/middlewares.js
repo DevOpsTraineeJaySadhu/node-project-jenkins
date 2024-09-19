@@ -66,6 +66,7 @@ middleware.createPrototype = async (req, res, next) => {
       'game_mode', // 'classic', 'twoToken', 'threeToken', 'popular'
       'participation_count',
       'environment',
+      'master_timer',
       // 'pot_size',
       'rewards',
       'user_info',
@@ -90,6 +91,7 @@ middleware.createPrototype = async (req, res, next) => {
       // isEnvironment: 'DEV', //oProtoBody.environment
       isEnvironment: oProtoBody.environment, //oProtoBody.environment
       iRoomId: _.randomizeNumber(),
+      nFinishGameTimer:oProtoBody.master_timer,
       // aBotsData: oProtoBody.bot_players,
     };
 

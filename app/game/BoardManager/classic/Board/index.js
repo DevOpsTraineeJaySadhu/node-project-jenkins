@@ -155,6 +155,24 @@ class Board extends Service {
       let axiosOptions;
 
       log.cyan('axios call for this :::::::::::::::', this.isEnvironment);
+
+      let highestScorePlayer = this.aParticipant[0];
+      let tiedPlayers = [];
+
+        for (let i = 0; i < this.aParticipant.length; i++) {
+            if (this.aParticipant[i].nScore===highestScorePlayer.nScore) {
+              tiedPlayers.push(this.aParticipant[i]);
+            }
+        }
+      if(tiedPlayers.length>1){
+        for (const winner of tiedPlayers) {
+          winner.nWinningAmount = this.aWinningAmount[0] / tiedPlayers.length;
+          winner.nRank = 1;
+          winner.eState = 'winner';
+          winner.sReason = 'Congratulations! It\'s a tie!';
+        }
+     
+      }else{
       const winner = this.getParticipant(iWinnerId);
       winner.nWinningAmount = this.aWinningAmount[0];
       winner.nRank = 1;
@@ -169,11 +187,13 @@ class Board extends Service {
           participant.sReason = participant.sReason === '' ? 'Batter Luck Next Time!' : participant.sReason;
         }
       }
+    }
       this.iWinnerId = iWinnerId;
       this.eState = 'finished';
       await this.update({ aParticipant: this.aParticipant.map(p => p.toJSON()), eState: 'finished', iWinnerId: this.iWinnerId, nAmountOut: this.aWinningAmount[0] });
 
       let aPayload = [];
+      let aPlayerScore = [];
       for (let i = 0; i < this.aParticipant.length; i++) {
         const _user = this.aParticipant[i];
         let data = {
@@ -183,6 +203,10 @@ class Board extends Service {
             deaths: _user.nDeath,
             rank: _user.nRank,
           },
+          playerScore:{
+            user_id: _user.iUserId,
+            nScore: _user.nScore,
+          }
         };
 
         // this.aParticipant[i].aScore.nKills = _user.nKills;
@@ -190,6 +214,7 @@ class Board extends Service {
         this.aParticipant[i].aScore.nRank = _user.nRank;
         this.aParticipant[i].aScore.eState = _user.eState;
         aPayload.push(data.score.rank);
+        aPlayerScore.push(data.playerScore);
       }
       let isExit = [];
       for (const p of this.aParticipant) {
@@ -207,6 +232,7 @@ class Board extends Service {
             status: this.eState,
             winner: this.iWinnerId ? this.iWinnerId : this.aParticipant.filter(e => e.nRank === 1)[0].iUserId,
             score: aPayload,
+            aPlayerScore:aPlayerScore,
             isValidLeave: bValidLeave,
             // sWinningImage: `${this._id}.png`,
             sWinningImage: `${process.env.BUCKET_URL}${process.env.BUCKET_FOLDER_NAME}/${this._id}.png`,
@@ -224,6 +250,7 @@ class Board extends Service {
             // winner: this.aParticipant.filter(e => e.nRank === 1)[0].iUserId,
             winner: this.iWinnerId ? this.iWinnerId : this.aParticipant.filter(e => e.nRank === 1)[0].iUserId,
             score: aPayload,
+            aPlayerScore:aPlayerScore,
             isValidLeave: bValidLeave,
             // sWinningImage: `${this._id}.png`,
             sWinningImage: `${process.env.BUCKET_URL}${process.env.BUCKET_FOLDER_NAME}/${this._id}.png`,

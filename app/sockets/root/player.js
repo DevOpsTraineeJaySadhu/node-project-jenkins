@@ -125,12 +125,15 @@ PlayerListener.prototype.leave = async function (oData, callback) {
   log.red('## leave table called from user ', this.iUserId);
   const board = await boardManager.getBoard(this.iBoardId);
   if (!board) return this.logError(messages.not_found('Board'), callback);
-  if (!board.isExit && board.eState !== 'waiting') return callback("Can't leave at this stage", { oData: { eState: 'playing' } });
-
   const participant = board.getParticipant(this.iUserId);
+  if(participant.eUserType==="user"){
+    if (!board.isExit && board.eState !== 'waiting')
+    return callback("Can't leave at this stage", { oData: { eState: 'playing' } });
+  }
   if (!participant) return this.logError(messages.not_found('participant'), callback);
 
-  queue.addJob(this.iBoardId, { sEventName: 'reqLeave', iBoardId: this.iBoardId, iUserId: this.iUserId });
+  // queue.addJob(this.iBoardId, { sEventName: 'reqLeave', iBoardId: this.iBoardId, iUserId: this.iUserId });
+  emitter.emit('reqLeave', { sTaskName: 'reqLeave', iBoardId: this.iBoardId, iUserId: this.iUserId ?? '' });
 };
 
 PlayerListener.prototype.sendEmoji = async function (oData, callback) {
@@ -187,6 +190,17 @@ Player.prototype.joinBoard = async function ({ iBoardId, isReconnect }, callback
   if (!board) {
     return callback(null, { oData: { eState: 'finished' } });
   }
+  // const options = {
+  //   method: 'post',
+  //   url: `${process.env.BOT_URL}/bot/initialize`,
+  //   headers: { 'Content-Type': 'application/json' },
+  //   data: { iBoardId: iBoardId },
+  // };
+  
+
+  // if(board.aPlayer.length < board.nMaxPlayer){
+  //   _.axios(options, _.emptyCallback);
+  // }
   // TODO reconnection flag from BE side
   const participantReconnect = board.getParticipant(this.iUserId);
   if (participantReconnect) {
@@ -207,9 +221,10 @@ Player.prototype.joinBoard = async function ({ iBoardId, isReconnect }, callback
   let oPlayerObj = {};
 
   for (const participant of board.aPlayer) {
-    if (participant.user_id === this.socket.user.iUserId)
-      oPlayerObj = { _id: participant.user_id, sUserName: participant.sUserName, image: participant.image, nColor: participant.nColor, nDiamond: participant.nDiamond };
+    if (participant.user_id === this.socket.user.iUserId){
+      oPlayerObj = { _id: participant.user_id, sUserName: participant.sUserName,eUserType:participant?.eUserType, image: participant.image, nColor: participant.nColor, nDiamond: participant.nDiamond };
   }
+}
 
   const params = {
     iBoardId: iBoardId,

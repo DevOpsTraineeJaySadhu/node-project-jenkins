@@ -391,4 +391,9 @@ _.removeFieldFromArray = async (array, fieldToRemove) => {
   });
 };
 
+_.axios = function (option, callback = () => { }) {
+  return axios(option)
+      .then((response) => callback(null, _.parse(response.data)))
+      .catch((error) => callback(error.message));
+};
 module.exports = _;

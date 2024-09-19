@@ -70,16 +70,25 @@ class Participant extends Service {
       await this.oBoard.update({ isExit: true });
     }
     log.yellow('resMovePawn emit will be sent to user :: ', this.oBoard.nDice, nMove);
-
-    this.oBoard.emit('resMovePawn', { iUserId: this.iUserId, nIndex, nMove, nDestination, isExit: this.oBoard.isExit });
+    await this.calculateScore();
+    await this.oBoard.update({
+      aParticipant: [this.toJSON()],
+    });
+    this.oBoard.emit('resMovePawn', { iUserId: this.iUserId, nIndex, nMove, nDestination, isExit: this.oBoard.isExit,nScore:this.nScore});
 
     await _.delay(175 * nMove);
     // await _.delay(250 * nMove); // D
 
     if (_oData && _oData?.iUserId) {
+      const opponent = this.oBoard.aParticipant.find(p => p.iUserId === _oData.iUserId);
+      opponent.calculateScore();
+      await this.oBoard.update({
+        aParticipant: [opponent.toJSON()],
+      });
       this.oBoard.emit('resSendToHome', {
         iUserId: _oData.iUserId,
         nIndex: _oData.nIndex,
+        nScore: opponent.nScore
       });
       await _.delay(17.5 * _oData.nMoved);
       // await _.delay(25 * _oData.nMoved); // D
@@ -116,12 +125,19 @@ class Participant extends Service {
       if (myPegKill?.oParticipant) {
         aParticipant.push(this.toJSON());
         aParticipant.push(myPegKill.oParticipant.toJSON());
+        const participant = this.oBoard.aParticipant.find(p => p.iUserId === this.iUserId);
+        let sum = 0;
+        for (let i = 0; i < participant.aPawn.length; i++ ) {
+          sum += opponent.aPawn[i];
+        }
+        this.nScore=sum;
         await this.oBoard.update({
           aParticipant,
         });
         this.oBoard.emit('resSendToHome', {
           iUserId: this.iUserId,
           nIndex: aSiblingPresent[0].nPegIndex,
+          nScore:this.nScore
         });
         await _.delay(17.5 * _oData.nMoved);
         await this.oBoard.update({
@@ -142,6 +158,11 @@ class Participant extends Service {
     return callback(null);
   }
 
+  async calculateScore() {
+    this.nScore = this.aPawn.reduce((sum, pawnPosition) => {
+        return sum + pawnPosition;
+    }, 0);
+  }
   checkPawnKilled(nPublicPosition) {
     log.green('checkPawnKilled called... ', this.iUserId);
     // this.oBoard.aLogs.push('checkPawnKilled called...');

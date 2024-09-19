@@ -58,7 +58,8 @@ class Service {
     const oTableData = await redis.client.json.GET(key);
     log.green('initializeGame oTableData state ...', oTableData.eState);
     if (!oTableData) return false;
-
+    this.setSchedular('finishGameTimer', null, this.oSetting.nFinishGameTimer);
+    this.emit('resGameTimer', {nRemainingTime:this.oSetting.nFinishGameTimer});
     if (oTableData.eState === 'playing') {
       // change
       await ExistBoard.create({
@@ -103,6 +104,7 @@ class Service {
     this.nBoardFee = oBoardData.nBoardFee;
     this.eBoardType = oBoardData.eBoardType;
     this.nMaxPlayer = oBoardData.nMaxPlayer;
+    this.aPlayer = oBoardData.aPlayer;
     this.nDice = oBoardData.nDice;
     this.nAmountIn = oBoardData.nAmountIn;
     this.nAmountOut = oBoardData.nAmountOut;
@@ -225,7 +227,10 @@ class Service {
     let availableDices = await this.availableDices();
     if (oData.bTurnMissed) availableDices = availableDices.filter(d => d !== 6);
     if (!availableDices.length) availableDices = [1, 2, 3, 4, 5];
-    const currentDice = oData.nDice || _.randomFromArray(availableDices);
+    // const currentDice = oData.nDice || _.randomFromArray(availableDices);
+    const currentDice = (oData.nDice && oData.nDice !== 'undefined' && !isNaN(Number(oData.nDice))) 
+    ? Number(oData.nDice) ||  _.randomFromArray(availableDices)
+    : _.randomFromArray(availableDices);
     if (!currentDice) {
       return passTurn();
     }

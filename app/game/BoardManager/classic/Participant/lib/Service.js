@@ -32,6 +32,8 @@ class Service {
     this.sReason = oParticipantData.sReason || '';
     this.sImage = oParticipantData.sImage || 'avatar_m_1';
     this.oBoard = oBoard;
+    this.eUserType = oParticipantData.eUserType||'user';
+    this.nScore = oParticipantData.nScore || 0;
   }
 
   async generateHashToken(data) {
@@ -82,6 +84,9 @@ class Service {
       const nTokenCount = await redis.client.zIncrBy(turnInfo.sHashToken, 1, _.toString(this.oBoard._id));
     }
 
+    const nRemainingTime = await this.oBoard.getScheduler('finishGameTimer');
+    this.emit('resGameTimer', { nRemainingTime });
+    
     turnInfo.ttl = await this.oBoard.getScheduler('assignTurnTimeout', turnInfo.iUserId);
     turnInfo.ttl -= nTurnBuffer;
     if (turnInfo.bDiceRolled && turnInfo.iUserId === this.iUserId) turnInfo.aMovablePawns = this.getMovablePawns(this.oBoard.nDice);
@@ -155,7 +160,7 @@ class Service {
 
       const playingPlayerLeft = async () => {
         log.yellow('playingPlayerLeft ::: called!!');
-        if (!this.oBoard.isExit && this.eState !== 'ame') {
+        if (this.oBoard.isExit && this.eState !== 'ame') {
           this.eState = 'playing';
           await this.oBoard.update({ aParticipant: [this.toJSON()] });
           return this.passTurn(true);
@@ -359,6 +364,8 @@ class Service {
       'bSound',
       'sReason',
       'sImage',
+      'eUserType',
+      'nScore'
     ]);
   }
 }

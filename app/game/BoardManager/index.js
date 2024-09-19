@@ -30,7 +30,8 @@ class BoardManager {
     emitter.on('handleState', this.schedular.bind(this, 'handleState'));
     emitter.on('autoTurn', this.schedular.bind(this, 'autoTurn'));
     emitter.on('takeTurn', this.schedular.bind(this, 'takeTurn'));
-    emitter.on('reqLeave', this.customQueue.bind(this));
+    emitter.on('reqLeave', this.schedular.bind(this,'reqLeave'));
+    // emitter.on('reqLeave', this.customQueue.bind(this));
     emitter.on('saveBoardHistory', this.saveBoardHistory.bind(this));
     emitter.on('flushBoard', this.flushBoard.bind(this));
     emitter.on('addWinner', this.schedular.bind(this));
@@ -101,7 +102,12 @@ class BoardManager {
   async scheduleTask(sTaskName, iBoardId, iUserId) {
     const board = await this.getBoard(iBoardId);
     if (!board) return false;
-
+    let aParticipant ;
+    for (const [_key, value] of Object.entries(board)) {
+      if (_key.includes('aParticipant')) {
+        aParticipant=value;
+      }
+    }
     const participant = iUserId ? board.getParticipant(iUserId) : undefined;
     switch (sTaskName) {
       case 'assignTurnTimeout':
@@ -135,7 +141,8 @@ class BoardManager {
         board.addWinner();
         break;
       case 'finishGameTimer':
-        board.setTimerFinished();
+        const winnerId =this.findWinnerHighestScore(aParticipant);
+        board.finishGame(winnerId);
         break;
       case 'saveCanceledGame':
         board.saveCanceledGameData(iBoardId);
@@ -145,7 +152,19 @@ class BoardManager {
         break;
     }
   }
-
+  
+  findWinnerHighestScore(players) {
+    let highestScorePlayer = players[0];
+    for (let i = 1; i < players.length; i++) {
+        if (players[i].nScore > highestScorePlayer.nScore) {
+            highestScorePlayer = players[i];
+        }
+    }
+    
+    return highestScorePlayer.iUserId
+  
+   
+}
   generateClass(oBoardData) {
     // let boardClass;
     // switch (oBoardData.eGameType) {
@@ -244,6 +263,7 @@ class BoardManager {
         ...this.oDefaultSetting,
         nMaxWaitingTime: oProtoData?.nMaxRefundTime || 60000, // 1 minute
         nTurnTime: oProtoData?.nTurnTime || 20000,
+        nFinishGameTimer:oProtoData.nFinishGameTimer
         // nTurnTime: 20000,
       };
 
