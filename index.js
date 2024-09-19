@@ -11,7 +11,7 @@ const axios = require('axios');
 
 (async () => {
   try {
-    // await getIp();
+    await getIp();
     await mongodb.initialize();
     await redis.initialize();
     router.initialize();
