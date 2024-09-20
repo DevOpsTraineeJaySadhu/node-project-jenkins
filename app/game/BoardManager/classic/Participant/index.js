@@ -186,9 +186,10 @@ class Participant extends Service {
         nIndex = result[0];
         oParticipant = participant;
         iUserId = participant.iUserId;
-        participant.aPublicPosition[nIndex] = 0;
+        const nDefaultPosition = positions[this.oBoard.nMaxPlayer][participant.nSeat][1];
+        participant.aPublicPosition[nIndex] = nDefaultPosition;
         nMoved = participant.aPawn[nIndex];
-        participant.aPawn[nIndex] = 0;
+        participant.aPawn[nIndex] = 1;
         participant.aAutoMovePawn.splice(participant.aAutoMovePawn.indexOf(nIndex), 1);
         participant.nDeath = participant.nDeath + 1;
         break;
