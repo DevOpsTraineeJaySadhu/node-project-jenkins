@@ -153,6 +153,9 @@ class Service {
         nChips: _.salt(4, Number),
         sImage: oUserData.oUserData.image,
       };
+      _userData.aPawn=[1,1,1,1];
+      const nDefaultPosition = positions[this.nMaxPlayer][_userData.nSeat][1];
+      _userData.aPublicPosition = [nDefaultPosition, nDefaultPosition, nDefaultPosition, nDefaultPosition];
       const oParticipant = new Participant(_userData, this);
       const { nMaxWaitingTime } = this.oSetting;
 
