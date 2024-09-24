@@ -222,7 +222,7 @@ Player.prototype.joinBoard = async function ({ iBoardId, isReconnect }, callback
 
   for (const participant of board.aPlayer) {
     if (participant.user_id === this.socket.user.iUserId){
-      oPlayerObj = { _id: participant.user_id, sUserName: participant.sUserName,eUserType:participant?.eUserType, image: participant.image, nColor: participant.nColor, nDiamond: participant.nDiamond };
+      oPlayerObj = { _id: participant.user_id, sUserName: participant.sUserName,eUserType:participant?.eUserType, image: participant.image, nColor: participant.nColor, nDiamond: participant.nDiamond,sToken:participant.sToken };
   }
 }
 

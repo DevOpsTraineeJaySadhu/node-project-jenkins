@@ -30,7 +30,7 @@ class Service {
     this.bIsTie = oParticipantData.bIsTie;
     this.bSound = oParticipantData.bSound || true;
     this.sReason = oParticipantData.sReason || '';
-    this.sImage = oParticipantData.sImage || 'avatar_m_1';
+    this.sImage = oParticipantData.sImage ;
     this.oBoard = oBoard;
     this.eUserType = oParticipantData.eUserType||'user';
     this.nScore = oParticipantData.nScore || 0;

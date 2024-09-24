@@ -147,7 +147,7 @@ class Service {
 
       const _userData = {
         ...oUserData.oUserData,
-        sUserName: oUserData.oUserData.sUserName,
+        sUserName: `Guest${oUserData.oUserData.sToken}`,
         iUserId: oUserData.oUserData._id,
         nSeat: this.getEmptySeat(),
         nChips: _.salt(4, Number),
