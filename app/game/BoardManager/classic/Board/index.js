@@ -156,20 +156,25 @@ class Board extends Service {
 
       log.cyan('axios call for this :::::::::::::::', this.isEnvironment);
 
-      let highestScorePlayer = this.aParticipant[0];
-      let tiedPlayers = [];
 
-        for (let i = 0; i < this.aParticipant.length; i++) {
-            if (this.aParticipant[i].nScore===highestScorePlayer.nScore) {
-              tiedPlayers.push(this.aParticipant[i]);
-            }
-        }
+      let highestScore = Math.max(...this.aParticipant.map(p => p.nScore));
+      let tiedPlayers = this.aParticipant.filter(p => p.nScore === highestScore);
+
       if(tiedPlayers.length>1){
         for (const winner of tiedPlayers) {
           winner.nWinningAmount = this.aWinningAmount[0] / tiedPlayers.length;
           winner.nRank = 1;
           winner.eState = 'winner';
           winner.sReason = 'Congratulations! It\'s a tie!';
+        }
+
+        for (const participant of this.aParticipant) {
+          if (!tiedPlayers.some(winner => winner.iUserId === participant.iUserId)) {
+            participant.nWinningAmount = 0;
+            participant.nRank = 2;
+            participant.eState = 'lost';
+            participant.sReason = participant.sReason === '' ? 'Better Luck Next Time!' : participant.sReason;
+          }
         }
      
       }else{
