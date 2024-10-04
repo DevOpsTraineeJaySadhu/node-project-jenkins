@@ -266,7 +266,7 @@ class Board extends Service {
 
       await _.removeFieldFromArray(this.aPlayer, 'sUserToken'),
         this.emit('resResult', {
-          aParticipant: this.aParticipant.sort((a, b) => a.nRank - b.nRank),
+          aParticipant: this.aParticipant.sort((a, b) => b.nScore - a.nScore),
           isValidLeave: this.isValidLeave,
           aPlayer: this.aPlayer,
         });

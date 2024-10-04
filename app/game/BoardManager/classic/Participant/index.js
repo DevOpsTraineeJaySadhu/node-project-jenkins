@@ -76,7 +76,7 @@ class Participant extends Service {
     });
     this.oBoard.emit('resMovePawn', { iUserId: this.iUserId, nIndex, nMove, nDestination, isExit: this.oBoard.isExit,nScore:this.nScore});
 
-    await _.delay(175 * nMove);
+    await _.delay(180 * nMove);
     // await _.delay(250 * nMove); // D
 
     if (_oData && _oData?.iUserId) {
