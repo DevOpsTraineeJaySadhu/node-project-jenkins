@@ -12,6 +12,8 @@ class Board extends Service {
     try {
       if (this.eState === 'waiting') {
         this.emit('resKickOut', { message: messages.custom.no_player_found });
+        console.log("message:::::::::::",{ message: messages.custom.no_player_found });
+        
         // emitter.emit('flushBoard', { sTaskName: 'flushBoard', iBoardId: this._id, iUserId: this.iUserId ?? '' });
         // await redis.client.unlink(_.getProtoKey(this.iProtoId));
         // await redis.client.unlink(_.getBoardKey(this._id));
