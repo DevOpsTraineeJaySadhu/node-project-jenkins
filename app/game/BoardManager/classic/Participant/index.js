@@ -90,8 +90,8 @@ class Participant extends Service {
         nIndex: _oData.nIndex,
         nScore: opponent.nScore
       });
-      await _.delay(17.5 * _oData.nMoved);
-      // await _.delay(25 * _oData.nMoved); // D
+      // await _.delay(17.5 * _oData.nMoved);
+      await _.delay(35 * _oData.nMoved); // D
 
       this.nKills = this.nKills + 1; // Add kils
       await this.oBoard.update({

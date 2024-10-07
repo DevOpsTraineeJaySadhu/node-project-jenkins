@@ -37,7 +37,7 @@ class Service {
     this.isEnvironment = oBoardData.isEnvironment;
     this.dCreatedDate = oBoardData.dCreatedDate;
     this.aLogs = oBoardData.aLogs || [];
-    this.sVersion = oBoardData.sVersion || 'v2.0.0';
+    this.sVersion = oBoardData.sVersion || 'v1.0.0';
   }
 
   async generateHashToken(data) {
