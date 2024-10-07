@@ -79,7 +79,16 @@ class Board extends Service {
             },
           };
         }
-
+        console.log("🚀 ~ file: index.js:54 ~ Board ~ refundOnLongWait ~ axiosOptions:", axiosOptions)
+        log.green("data:::::::",{
+          game_id: this._id,
+          status: 'canceled',
+          winner: '',
+          score: [0, 0],
+          // isValidLeave: this.oBoard.isValidLeave,
+          isValidLeave: this.isValidLeave,
+          game_mode: this.eGameType,
+        })
         if (this.isEnvironment !== 'DEV') {
           const endGame = await retryAxiosCall(axiosOptions);
           if (endGame) {
