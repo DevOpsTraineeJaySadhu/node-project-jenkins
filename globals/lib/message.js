@@ -7,7 +7,7 @@ const customMessages = {
   already_exists_mobile: { code: 409, message: 'User already exists with this mobile number' },
   max_board_join_limit: { code: 419, message: 'You can not join more than 3 board' },
   wait_for_turn: { code: 419, message: 'Please wait for your turn' },
-  no_player_found: { code: 409, message: 'No playing player found Try after some time' },
+  no_player_found: { code: 409, message: 'Not enough player Joined please try again !' },
   invalid_code: { code: 401, message: 'Invalid code or board has been started already !' },
   can_not_join_board: { code: 401, message: 'can not join board.' },
   power_up_used: { code: 403, message: 'you have already used this powerup.' },
