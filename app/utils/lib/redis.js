@@ -35,7 +35,7 @@ class RedisClient {
       this.subClient = createClient(this.options);
       this.pubClient = createClient(this.options);
       await Promise.all([this.client.connect(), this.pubClient.connect(), this.subClient.connect()]);
-      // if (process.env.NODE_ENV !== 'prod') await this.subClient.CONFIG_SET('notify-keyspace-events', 'Ex');
+      if (process.env.NODE_ENV !== 'prod') await this.subClient.CONFIG_SET('notify-keyspace-events', 'Ex');
       await this.subClient.subscribe(['__keyevent@0__:expired', 'redisEvent'], this.onMessage, false);
       // console.log(this.pubClient);
       this.client.on('error', log.error);

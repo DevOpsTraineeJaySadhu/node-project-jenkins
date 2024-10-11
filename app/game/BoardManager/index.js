@@ -23,7 +23,7 @@ class BoardManager {
     emitter.on('initializeGame', this.schedular.bind(this, 'initializeGame'));
     emitter.on('assignTurnTimeout', this.schedular.bind(this, 'assignTurnTimeout'));
     emitter.on('declareResult', this.schedular.bind(this, 'declareResult'));
-    emitter.on('finishGame', this.schedular.bind(this, 'finishGame'));
+    emitter.on('finishGame', this.schedular.bind(this, 'tieGamfinishGameeTimer'));
     emitter.on('finishGameTimer', this.schedular.bind(this, 'finishGameTimer'));
     emitter.on('resetTable', this.schedular.bind(this, 'resetTable'));
     emitter.on('splitWinning', this.schedular.bind(this, 'splitWinning'));

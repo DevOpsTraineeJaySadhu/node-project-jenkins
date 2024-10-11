@@ -8,6 +8,7 @@ const customMessages = {
   max_board_join_limit: { code: 419, message: 'You can not join more than 3 board' },
   wait_for_turn: { code: 419, message: 'Please wait for your turn' },
   no_player_found: { code: 409, message: 'Game Cancelled' },
+  game_tie: { code: 409, message: 'The game is tied, you get an extra 1 minute.'},
   invalid_code: { code: 401, message: 'Invalid code or board has been started already !' },
   can_not_join_board: { code: 401, message: 'can not join board.' },
   power_up_used: { code: 403, message: 'you have already used this powerup.' },

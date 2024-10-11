@@ -172,21 +172,25 @@ class Board extends Service {
       let tiedPlayers = this.aParticipant.filter(p => p.nScore === highestScore);
 
       if(tiedPlayers.length>1){
-        for (const winner of tiedPlayers) {
-          winner.nWinningAmount = this.aWinningAmount[0] / tiedPlayers.length;
-          winner.nRank = 1;
-          winner.eState = 'winner';
-          winner.sReason = 'Congratulations! It\'s a tie!';
-        }
+        await this.setSchedular('finishGameTimer', null, 60000);
+        await this.emit('resTieGameTimer', {nRemainingTime:60000, message:messages.custom.game_tie});
+        // await this.emit('resGameTimer', {nRemainingTime:60000});
+        return false;
+        // for (const winner of tiedPlayers) {
+        //   winner.nWinningAmount = this.aWinningAmount[0] / tiedPlayers.length;
+        //   winner.nRank = 1;
+        //   winner.eState = 'winner';
+        //   winner.sReason = 'Congratulations! It\'s a tie!';
+        // }
 
-        for (const participant of this.aParticipant) {
-          if (!tiedPlayers.some(winner => winner.iUserId === participant.iUserId)) {
-            participant.nWinningAmount = 0;
-            participant.nRank = 2;
-            participant.eState = 'lost';
-            participant.sReason = participant.sReason === '' ? 'Better Luck Next Time!' : participant.sReason;
-          }
-        }
+        // for (const participant of this.aParticipant) {
+        //   if (!tiedPlayers.some(winner => winner.iUserId === participant.iUserId)) {
+        //     participant.nWinningAmount = 0;
+        //     participant.nRank = 2;
+        //     participant.eState = 'lost';
+        //     participant.sReason = participant.sReason === '' ? 'Better Luck Next Time!' : participant.sReason;
+        //   }
+        // }
      
       }else{
       const winner = this.getParticipant(iWinnerId);

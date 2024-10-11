@@ -38,6 +38,7 @@ class Service {
     this.dCreatedDate = oBoardData.dCreatedDate;
     this.aLogs = oBoardData.aLogs || [];
     this.sVersion = oBoardData.sVersion || 'v1.0.0';
+    this.sVersion = oBoardData.sVersion || 'v1.0.0';
   }
 
   async generateHashToken(data) {
@@ -105,6 +106,7 @@ class Service {
     this.eBoardType = oBoardData.eBoardType;
     this.nMaxPlayer = oBoardData.nMaxPlayer;
     this.aPlayer = oBoardData.aPlayer;
+    this.aPlayer = oBoardData.aPlayer;
     this.nDice = oBoardData.nDice;
     this.nAmountIn = oBoardData.nAmountIn;
     this.nAmountOut = oBoardData.nAmountOut;
@@ -140,13 +142,14 @@ class Service {
 
   async addParticipant(oUserData) {
     try {
-      log.green('## addParticipant called for user....');
+      log.green('## addParticipant called for user....', oUserData);
       // const key = this.sPrivateCode ? _.getProtoKey(this.sPrivateCode) : _.getProtoKey(this.iProtoId);
       // const nTotalParticipant = oUserData.nTurn;
       const nTotalParticipant = this.aParticipant.length;
 
       const _userData = {
         ...oUserData.oUserData,
+        // sUserName: oUserData.oUserData.sUserName,
         sUserName: `Guest${oUserData.oUserData.sToken}`,
         iUserId: oUserData.oUserData._id,
         nSeat: this.getEmptySeat(),
@@ -156,6 +159,7 @@ class Service {
       _userData.aPawn=[1,1,1,1];
       const nDefaultPosition = positions[this.nMaxPlayer][_userData.nSeat][1];
       _userData.aPublicPosition = [nDefaultPosition, nDefaultPosition, nDefaultPosition, nDefaultPosition];
+      _userData.aPawn=[1,1,1,1];
       const oParticipant = new Participant(_userData, this);
       const { nMaxWaitingTime } = this.oSetting;
 
@@ -164,7 +168,8 @@ class Service {
       // oParticipant.updateUser({ $inc: { nChips: -this.nBoardFee } });
       // this.nAmountIn += this.nBoardFee;
 
-      if (this.aParticipant.length === 1) this.setSchedular('refundOnLongWait', null, this.oSetting.nMaxRefundTime);
+      if (this.aParticipant.length === 1) this.setSchedular('refundOnLongWait', null, this.oSetting.nMaxWaitingTime);
+
       // this.setSchedular('initializeGame', null, this.oSetting.nInitializeTimer);//TODO : 3 kalak * 3 * 1000
       // log.red('this.nMaxPlayer :: ', this.nMaxPlayer);
       // log.red('nTotalParticipant :: ', this.aParticipant.length);
@@ -234,6 +239,7 @@ class Service {
     const currentDice = (oData.nDice && oData.nDice !== 'undefined' && !isNaN(Number(oData.nDice))) 
     ? Number(oData.nDice) ||  _.randomFromArray(availableDices)
     : _.randomFromArray(availableDices);
+    // const currentDice = oData.nDice || _.randomFromArray(availableDices);
     if (!currentDice) {
       return passTurn();
     }
