@@ -92,4 +92,5 @@ const LudoGame = new mongoose.Schema(
   { timestamps: { createdAt: 'dCreatedDate', updatedAt: 'dUpdatedDate' } }
 );
 LudoGame.index({ dCreatedDate: 1 }, { expireAfterSeconds: 259200 }); // 259200 -> 3 days
+LudoGame.index({ iGameId: 1 }); 
 module.exports = mongoose.model('ludo_game', LudoGame);
